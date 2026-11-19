@@ -6,132 +6,198 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>面試服務</title>
 <style>
-:root{--bg:#eef1ee;--ink:#17231f;--mut:#5d6b65;--card:#fff;--line:#cfd8d3;--main:#0e5a47;--main2:#0a3f32;--ok:#1f7a3d;--no:#b3261e;--warn:#b26a00}
-@media (prefers-color-scheme:dark){:root{--bg:#111a17;--ink:#e8efeb;--mut:#9aaba3;--card:#1a2622;--line:#2f413a;--main:#3fb58f;--main2:#2c8a6b}}
+:root{--bg:#f3f4f7;--ink:#0f1b2d;--mut:#66748b;--card:#fff;--line:#dde2ea;--navy:#12355b;--navy2:#0c2644;--gold:#b8893b;--ok:#16794a;--okbg:#e6f4ec;--no:#b42318;--nobg:#fdecea;--warn:#a15c07;--warnbg:#fdf3e1}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"PingFang HK","Noto Sans HK","Microsoft JhengHei",system-ui,sans-serif;font-size:20px}
-.screen{display:none;min-height:100%;padding:max(24px,env(safe-area-inset-top)) 40px 40px;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:20px/1.5 "PingFang HK","Noto Sans HK","Microsoft JhengHei",system-ui,sans-serif}
+#top{position:fixed;inset:0 0 auto;height:64px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;background:var(--navy);color:#fff;z-index:4}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:22px;letter-spacing:.08em}
+.brand i{width:10px;height:28px;background:var(--gold);border-radius:3px}
+.brand small{font-weight:400;font-size:12px;letter-spacing:.16em;opacity:.7;text-transform:uppercase}
+#devTag{font-size:15px;opacity:.85}
+#lockMark{position:fixed;top:0;right:0;width:80px;height:64px;z-index:6}
+.screen{display:none;min-height:100vh;padding:96px 40px 48px;flex-direction:column;align-items:center;justify-content:center;gap:24px}
 .screen.on{display:flex}
-h1{font-size:44px;margin:0;letter-spacing:.06em}
-h2{font-size:32px;margin:0}
+h1{font-size:48px;margin:0;letter-spacing:.12em;font-weight:700;text-align:center}
+h2{font-size:30px;margin:0;font-weight:700}
+h3{font-size:18px;margin:0 0 14px;color:var(--mut);letter-spacing:.1em;font-weight:600}
 p{margin:0;color:var(--mut)}
-.btn{font:inherit;font-weight:700;border:0;border-radius:16px;padding:22px 44px;min-width:220px;background:var(--main);color:#fff;font-size:26px;cursor:pointer}
+.en{font-size:14px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 32px;width:min(100%,780px);box-shadow:0 8px 30px rgba(15,27,45,.06)}
+.btn{font:inherit;font-weight:700;border:2px solid var(--navy);border-radius:14px;padding:18px 40px;min-width:200px;background:var(--navy);color:#fff;font-size:24px;cursor:pointer}
 .btn:active{transform:scale(.98)}
-.btn:disabled{background:var(--line);color:var(--mut)}
-.btn.ghost{background:transparent;color:var(--main);border:2px solid var(--main)}
-.btn.ok{background:var(--ok)}.btn.no{background:var(--no)}
-.big{width:min(100%,760px);display:flex;flex-direction:column;gap:18px}
-label{display:flex;flex-direction:column;gap:8px;font-weight:600}
-input,textarea{font:inherit;font-size:26px;padding:16px 18px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:100%}
-input:focus,textarea:focus{outline:3px solid var(--main);border-color:var(--main)}
-.err{color:var(--no);font-size:18px;min-height:22px;font-weight:600}
+.btn:disabled{background:#e4e8ee;border-color:#e4e8ee;color:#9aa5b5}
+.btn.ghost{background:transparent;color:var(--navy)}
+.btn.ok{background:var(--ok);border-color:var(--ok)}.btn.no{background:var(--no);border-color:var(--no)}
+.btn.xl{font-size:34px;padding:30px 80px;border-radius:18px}
 .row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 28px;width:min(100%,760px)}
-.kv{display:grid;grid-template-columns:150px 1fr;gap:10px 16px;font-size:26px}
-.kv span:nth-child(odd){color:var(--mut);font-size:20px;align-self:center}
+.fld{display:flex;flex-direction:column;gap:6px;font-weight:600}
+.fld small{font-weight:500;color:var(--mut);font-size:14px;letter-spacing:.08em}
+input,textarea{font:inherit;font-size:26px;padding:16px 18px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);width:100%}
+input:focus,textarea:focus{outline:0;border-color:var(--navy);box-shadow:0 0 0 4px rgba(18,53,91,.15)}
+textarea:read-only{background:#f6f7f9;color:var(--ink)}
+.err{color:var(--no);font-size:18px;min-height:24px;font-weight:600;text-align:center}
+.form{display:flex;flex-direction:column;gap:20px}
+.steps{display:flex;align-items:center;gap:12px;color:var(--mut);font-size:16px}
+.steps hr{width:36px;border:0;border-top:2px solid var(--line);margin:0}
+.st{display:flex;align-items:center;gap:8px}
+.st i{font-style:normal;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:15px;font-weight:700}
+.st.on{color:var(--navy);font-weight:700}.st.on i{background:var(--navy);border-color:var(--navy);color:#fff}
+.st.d i{background:var(--gold);border-color:var(--gold);color:#fff}
+.tiles{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
+.tile{font:inherit;text-align:left;width:340px;padding:36px;border:2px solid var(--line);background:#fff;border-radius:22px;cursor:pointer;box-shadow:0 8px 30px rgba(15,27,45,.06)}
+.tile:active{border-color:var(--navy)}
+.tile b{display:block;font-size:56px;color:var(--gold);line-height:1;margin-bottom:12px}
+.tile strong{font-size:28px;display:block;color:var(--ink)}
+.tile span{color:var(--mut);font-size:18px}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:12px 16px;font-size:26px}
+.kv span:nth-child(odd){color:var(--mut);font-size:17px;align-self:center;letter-spacing:.06em}
 .kv span:nth-child(even){font-weight:700;word-break:break-all}
-.pick{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
-.pick .btn{min-width:300px;padding:48px 40px;font-size:34px}
-#lockMark{position:fixed;top:0;right:0;width:70px;height:70px;z-index:5}
+.no-big{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:34px;font-weight:700;letter-spacing:.04em;color:var(--navy);background:#eef2f7;border:2px dashed #b9c6d8;border-radius:14px;padding:14px 28px}
+.check{width:88px;height:88px;border-radius:50%;background:var(--okbg);color:var(--ok);display:grid;place-items:center;font-size:48px}
+/* reader */
+.vf{position:relative;width:min(100%,560px);border-radius:24px;overflow:hidden;background:#0b1522;border:4px solid var(--navy);min-height:300px}
+.vf::after{content:"";position:absolute;left:8%;right:8%;top:10%;height:3px;background:var(--gold);box-shadow:0 0 12px var(--gold);animation:scan 2.2s ease-in-out infinite alternate;pointer-events:none}
+@keyframes scan{to{top:88%}}
+.grid2{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;width:min(100%,1100px);align-items:start}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.tag{display:inline-block;border-radius:999px;padding:4px 16px;font-size:17px;font-weight:700;background:var(--warnbg);color:var(--warn)}
+.tag.ok{background:var(--okbg);color:var(--ok)}.tag.no{background:var(--nobg);color:var(--no)}
+.score{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-weight:600}
 .stars{display:flex;gap:8px}
-.stars button{font:inherit;font-size:24px;width:56px;height:56px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
-.stars button.s{background:var(--main);border-color:var(--main);color:#fff}
-.score{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0}
-#reader{width:min(100%,560px);border-radius:16px;overflow:hidden;background:#000}
-.tag{display:inline-block;border-radius:999px;padding:4px 16px;font-size:18px;font-weight:700;color:#fff;background:var(--warn)}
-.tag.ok{background:var(--ok)}.tag.no{background:var(--no)}
+.stars button{font:inherit;font-size:22px;font-weight:700;width:54px;height:54px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink)}
+.stars button.s{background:var(--navy);border-color:var(--navy);color:#fff}
+.stars button:disabled{opacity:1}
+.ban{display:none;align-items:center;gap:12px;background:var(--warnbg);color:var(--warn);border-radius:14px;padding:14px 18px;font-weight:700;width:min(100%,1100px)}
+.legend{font-size:15px;color:var(--mut);margin-top:6px}
+#modal{position:fixed;inset:0;background:rgba(10,20,35,.55);display:none;align-items:center;justify-content:center;z-index:10;padding:24px}
+#modal.on{display:flex}
+#modal .card{width:min(100%,520px);text-align:center;display:flex;flex-direction:column;gap:20px}
+#toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:var(--navy2);color:#fff;border-radius:999px;padding:14px 32px;font-weight:700;display:none;z-index:11}
+/* phone result */
+.pv{width:min(100%,520px);display:flex;flex-direction:column;gap:16px}
+.stat{display:flex;align-items:center;gap:14px;border-radius:18px;padding:20px 22px;font-size:30px;font-weight:800}
+.stat small{display:block;font-size:14px;font-weight:600;opacity:.8;letter-spacing:.1em}
+.stat.p{background:var(--warnbg);color:var(--warn)}.stat.a{background:var(--okbg);color:var(--ok)}.stat.r{background:var(--nobg);color:var(--no)}
+.bar{display:flex;gap:4px}.bar i{width:26px;height:10px;border-radius:3px;background:var(--line)}.bar i.f{background:var(--navy)}
+.note{white-space:pre-wrap;font-size:20px;color:var(--ink);background:#f6f7f9;border-radius:12px;padding:14px 16px}
+@media (max-width:600px){.screen{padding:84px 16px 32px}#top{padding:0 16px}.kv{font-size:22px;grid-template-columns:96px 1fr}}
+/* print sheet */
 #sheet{display:none}
+@page{size:A4;margin:14mm}
 @media print{
  body>*:not(#sheet){display:none!important}
- #sheet{display:block;background:#fff;color:#000;padding:10mm;font-size:14pt}
- #sheet h1{font-size:22pt;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:12px;letter-spacing:.04em}
- #sheet table{width:100%;border-collapse:collapse;margin:10px 0}
- #sheet td{border:1px solid #000;padding:8px 10px}
- #sheet td:first-child{width:32%;background:#eee}
- #sheet .qr{display:flex;align-items:center;gap:16px;margin-top:14px}
- #sheet .qr svg{width:42mm;height:42mm}
+ html,body{background:#fff}
+ #sheet{display:block;color:#000;font-family:"Songti TC","Noto Serif HK","PMingLiU",serif}
+ .pp{border:2px solid #000;padding:10mm;min-height:255mm;display:flex;flex-direction:column;gap:7mm}
+ .pp-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px double #000;padding-bottom:5mm}
+ .pp-t{font-size:30pt;font-weight:700;letter-spacing:.2em}
+ .pp-s{font-size:10pt;letter-spacing:.25em}
+ .pp-no{border:2px solid #000;padding:3mm 5mm;text-align:center}
+ .pp-no span{display:block;font-size:9pt;letter-spacing:.15em}
+ .pp-no b{font-size:19pt;font-family:"Courier New",monospace}
+ .pp-sec{font-size:11pt;letter-spacing:.2em;font-weight:700;border-left:4px solid #000;padding-left:3mm}
+ .pp table{width:100%;border-collapse:collapse;font-size:14pt}
+ .pp th,.pp td{border:1px solid #000;padding:3.5mm 4mm;text-align:left}
+ .pp th{width:30%;background:#eee;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .pp-qr{display:flex;gap:8mm;border:1px solid #000;padding:6mm;align-items:center}
+ .pp-qr svg{width:46mm;height:46mm;flex:none}
+ .pp-qr ol{margin:0;padding-left:5mm;font-size:12pt;line-height:1.9}
+ .pp-foot{margin-top:auto;border-top:1px solid #000;padding-top:3mm;font-size:9pt;display:flex;justify-content:space-between}
 }
 </style>
 </head>
 <body>
+<div id="top"><div class="brand"><i></i>面試服務<small>Interview Service</small></div><span id="devTag"></span></div>
 <div id="lockMark"></div>
 
-<!-- 1. 選擇裝置 -->
+<!-- 選擇裝置 -->
 <section class="screen" id="sPick">
-  <h1>面試服務</h1>
-  <p>請選擇這部 iPad 的用途（選定後會鎖定）</p>
-  <div class="pick">
-    <button class="btn" data-mode="kiosk">iPad 1<br><small>自助登記及列印</small></button>
-    <button class="btn" data-mode="reader">iPad 2<br><small>面試官評分</small></button>
+  <div class="en">Setup</div><h1>選擇裝置用途</h1>
+  <p>選定後會以密碼鎖定，之後重開網頁會直接進入該模式</p>
+  <div class="tiles">
+    <button class="tile" data-mode="kiosk"><b>1</b><strong>iPad 1　自助登記</strong><span>申請人輸入資料，列印附二維碼及編號的表格</span></button>
+    <button class="tile" data-mode="reader"><b>2</b><strong>iPad 2　面試官</strong><span>掃描二維碼、填寫評價、批核（提交後鎖定）</span></button>
   </div>
 </section>
 
-<!-- PIN -->
 <section class="screen" id="sPin">
   <h2 id="pinTitle">請輸入密碼</h2>
-  <div class="big"><input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="密碼" style="text-align:center;letter-spacing:.4em">
-  <div class="err" id="pinErr"></div></div>
+  <div class="card form" style="width:min(100%,460px)"><input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="● ● ● ●" style="text-align:center;letter-spacing:.4em"><div class="err" id="pinErr"></div></div>
   <div class="row"><button class="btn ghost" id="pinCancel">返回</button><button class="btn" id="pinOk">確定</button></div>
 </section>
 
-<!-- Kiosk -->
+<!-- iPad 1 -->
 <section class="screen" id="kWelcome">
-  <h1>歡迎參加面試</h1>
-  <p>請先登記資料，系統會列印面試表格給你</p>
-  <button class="btn" id="kStart" style="font-size:40px;padding:44px 90px">開始登記</button>
+  <div class="en">Interview Registration</div><h1>歡迎參加面試</h1>
+  <p style="font-size:22px">只需 3 步：填寫資料 → 核對確認 → 取走表格</p>
+  <button class="btn xl" id="kStart">開始登記</button>
 </section>
 
 <section class="screen" id="kForm">
-  <h2>請填寫個人資料</h2>
-  <div class="big">
-    <label>中文姓名<input id="fCn" autocomplete="off" placeholder="例：陳大文"></label>
-    <label>英文姓名<input id="fEn" autocomplete="off" autocapitalize="characters" placeholder="例：CHAN TAI MAN"></label>
-    <label>電話號碼<input id="fTel" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="8 位數字"></label>
+  <div class="steps"></div>
+  <div class="card form">
+    <h2>個人資料</h2>
+    <label class="fld">中文姓名<small>CHINESE NAME</small><input id="fCn" autocomplete="off" placeholder="例：陳大文"></label>
+    <label class="fld">英文姓名<small>ENGLISH NAME</small><input id="fEn" autocomplete="off" autocapitalize="characters" placeholder="例：CHAN TAI MAN"></label>
+    <label class="fld">電話號碼<small>PHONE · 8 DIGITS</small><input id="fTel" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="例：91234567"></label>
     <div class="err" id="fErr"></div>
   </div>
   <div class="row"><button class="btn ghost" id="fBack">返回</button><button class="btn" id="fNext">繼續</button></div>
 </section>
 
 <section class="screen" id="kConfirm">
-  <h2>請核對資料</h2>
-  <div class="card"><div class="kv" id="cData"></div></div>
-  <p id="cHint">請檢查資料是否正確</p>
-  <div class="row"><button class="btn ghost" id="cBack">修改</button><button class="btn" id="cPrint" disabled>列印</button></div>
+  <div class="steps"></div>
+  <div class="card"><h3>請核對以下資料</h3><div class="kv" id="cData"></div></div>
+  <p id="cHint">確認無誤後，請於倒數完結後按「列印」</p>
+  <div class="row"><button class="btn ghost" id="cBack">修改資料</button><button class="btn" id="cPrint" disabled>列印</button></div>
 </section>
 
 <section class="screen" id="kDone">
-  <h1>列印中…</h1>
-  <p>請取走表格，交給面試官</p>
-  <p id="dErr" class="err"></p>
+  <div class="steps"></div>
+  <div class="check">✓</div>
+  <h1 style="letter-spacing:.06em">表格列印中</h1>
+  <div class="no-big" id="doneNo"></div>
+  <p>請取走表格，並交給面試官</p>
+  <div class="err" id="dErr"></div>
   <button class="btn" id="dOk">完成</button>
 </section>
 
-<!-- Reader -->
+<!-- iPad 2 -->
 <section class="screen" id="rScan">
-  <h2>掃描申請人表格上的二維碼</h2>
-  <div id="reader"></div>
-  <div class="big"><div class="err" id="rErr"></div>
-  <label>找不到二維碼？輸入表格編號<input id="rManual" autocomplete="off" autocapitalize="off"></label></div>
-  <button class="btn ghost" id="rManualGo">讀取</button>
+  <div class="en">Interviewer</div><h2>請掃描申請人表格上的二維碼</h2>
+  <div class="vf"><div id="reader"></div></div>
+  <div class="err" id="rErr"></div>
 </section>
 
 <section class="screen" id="rView" style="justify-content:flex-start">
-  <div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2>申請人資料</h2><span class="tag" id="vTag">待評核</span></div>
-    <div class="kv" id="vData" style="margin-top:16px"></div></div>
-  <div class="card">
-    <h2 style="font-size:26px">面試評價</h2>
-    <div id="scores"></div>
-    <label style="margin-top:12px">評語<textarea id="vNote" rows="4" placeholder="輸入面試評語"></textarea></label>
+  <div class="ban" id="lockBan"><span style="font-size:28px">🔒</span><span id="lockTxt"></span></div>
+  <div class="grid2">
+    <div class="card" style="width:100%">
+      <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="margin:0">申請人資料</h3><span class="tag" id="vTag">待評核</span></div>
+      <div class="no-big" id="vNo" style="font-size:26px;margin-bottom:18px;text-align:center"></div>
+      <div class="kv" id="vData"></div>
+    </div>
+    <div class="card" style="width:100%">
+      <h3>面試評價</h3><div id="scores"></div><div class="legend">1 = 最低　5 = 最高</div>
+      <label class="fld" style="margin-top:16px">評語<textarea id="vNote" rows="4" placeholder="輸入面試評語"></textarea></label>
+    </div>
   </div>
   <div class="err" id="vErr"></div>
-  <div class="row">
-    <button class="btn ghost" id="vBack">掃描下一位</button>
-    <button class="btn no" id="vNo">不獲批</button>
+  <div class="row" id="act">
+    <button class="btn ghost" id="vBack">取消，掃描下一位</button>
+    <button class="btn no" id="vNo2">不獲批</button>
     <button class="btn ok" id="vYes">獲批</button>
   </div>
+  <button class="btn ghost" id="vBack2" style="display:none">掃描下一位</button>
 </section>
 
-<!-- 列印用表格 -->
+<!-- 手機：結果查詢 -->
+<section class="screen" id="pView" style="justify-content:flex-start">
+  <div class="pv" id="pBody"></div>
+</section>
+
+<div id="modal"><div class="card"><h2 id="mTitle"></h2><p id="mTxt" style="font-size:20px"></p><div class="row"><button class="btn ghost" id="mNo">返回修改</button><button class="btn" id="mOk">確定提交</button></div></div></div>
+<div id="toast"></div>
 <div id="sheet"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
@@ -139,9 +205,10 @@ input:focus,textarea:focus{outline:3px solid var(--main);border-color:var(--main
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
-/* ===== 設定：請改成你自己的 Firebase 專案資料及密碼 ===== */
+/* ===== 設定 ===== */
 const CONFIG = {
-  PIN: "1234",   // 解鎖密碼（請更改）
+  PIN: "1234",      // 解鎖密碼（請更改）
+  BASE_URL: "",     // 二維碼網址；留空 = 自動使用目前網頁網址（需為 https）
   firebase: {
     apiKey: "AIzaSyAHo10BgAvUSRGJFWPKlLI8N9w0KsqdCkk",
     authDomain: "interview-32dbe.firebaseapp.com",
@@ -152,21 +219,35 @@ const CONFIG = {
     appId: "1:403238014045:web:9c1d9c588b2f46930e91b4"
   }
 };
-/* ======================================================= */
+const CRITERIA = ['溝通表達', '專業知識', '工作態度', '整體印象'];
 
 const $ = id => document.getElementById(id);
-const show = id => { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); };
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = t => t ? new Date(t).toLocaleString('zh-HK', {hour12: false}) : '';
+const STAT = {pending: '待評核', approved: '獲批', rejected: '不獲批'};
 let db = null;
 try { firebase.initializeApp(CONFIG.firebase); db = firebase.database(); } catch (e) { console.error(e); }
 
+function show(id, step){
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+  if (step) document.querySelectorAll('#' + id + ' .steps').forEach(el => {
+    el.innerHTML = ['填寫資料', '核對確認', '列印表格'].map((t, i) =>
+      `<span class="st ${i + 1 < step ? 'd' : i + 1 === step ? 'on' : ''}"><i>${i + 1 < step ? '✓' : i + 1}</i>${t}</span>`).join('<hr>');
+  });
+  window.scrollTo(0, 0);
+}
+function toast(t){ const e = $('toast'); e.textContent = t; e.style.display = 'block'; setTimeout(() => e.style.display = 'none', 1800); }
 const store = {
   get(){ try { return localStorage.getItem('ivMode'); } catch(e){ return null; } },
   set(v){ try { localStorage.setItem('ivMode', v); } catch(e){} },
   del(){ try { localStorage.removeItem('ivMode'); } catch(e){} }
 };
+function parseId(t){
+  try { return new URL(t).searchParams.get('id'); }
+  catch(e){ return /^[-\w]{10,40}$/.test(t) ? t : null; }
+}
 
-/* ---------- 啟動 / 鎖定 ---------- */
+/* ---------- 鎖定 / 密碼 ---------- */
 let pinAction = null;
 function askPin(title, onOk, onCancel){
   $('pinTitle').textContent = title; $('pin').value = ''; $('pinErr').textContent = '';
@@ -178,126 +259,133 @@ $('pinOk').onclick = () => {
 };
 $('pin').onkeydown = e => { if (e.key === 'Enter') $('pinOk').click(); };
 $('pinCancel').onclick = () => pinAction.onCancel();
-
 document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
   const m = b.dataset.mode;
-  askPin('請輸入密碼以鎖定為 ' + (m === 'kiosk' ? 'iPad 1' : 'iPad 2'), () => { store.set(m); boot(); }, () => show('sPick'));
+  askPin('輸入密碼以鎖定為 ' + (m === 'kiosk' ? 'iPad 1（自助登記）' : 'iPad 2（面試官）'), () => { store.set(m); boot(); }, () => show('sPick'));
 });
-
-// 連按右上角 5 次 → 輸入密碼 → 解除鎖定
 let taps = 0, tapTimer;
 $('lockMark').onclick = () => {
   taps++; clearTimeout(tapTimer); tapTimer = setTimeout(() => taps = 0, 2000);
-  if (taps >= 5) { taps = 0; askPin('輸入密碼以解除鎖定', () => { stopScan(); store.del(); show('sPick'); }, boot); }
+  if (taps >= 5) { taps = 0; askPin('輸入密碼以解除鎖定', () => { stopScan(); store.del(); boot(); }, boot); }
 };
 
 function boot(){
-  const m = store.get();
+  const m = store.get(), id = parseId(new URLSearchParams(location.search).get('id') || '');
+  $('lockMark').style.display = m ? 'block' : 'none';
+  $('devTag').textContent = m === 'kiosk' ? '自助登記 · iPad 1' : m === 'reader' ? '面試官 · iPad 2' : '';
   if (m === 'kiosk') { resetKiosk(); show('kWelcome'); }
-  else if (m === 'reader') { startScan(); }
+  else if (m === 'reader') { id ? load(id) : startScan(); }
+  else if (id) openPublic(id);
   else show('sPick');
 }
 
 /* ---------- iPad 1：自助登記 ---------- */
-let rec = null;
-function resetKiosk(){ ['fCn','fEn','fTel'].forEach(i => $(i).value = ''); $('fErr').textContent = ''; rec = null; }
-
-$('kStart').onclick = () => show('kForm');
+let rec = null, cdT;
+function resetKiosk(){ ['fCn', 'fEn', 'fTel'].forEach(i => $(i).value = ''); $('fErr').textContent = ''; rec = null; }
+$('kStart').onclick = () => show('kForm', 1);
 $('fBack').onclick = () => show('kWelcome');
 $('fNext').onclick = () => {
-  const cn = $('fCn').value.trim(), en = $('fEn').value.trim().toUpperCase(),
-        tel = $('fTel').value.replace(/\D/g, '');
-  const e = $('fErr');
+  const cn = $('fCn').value.trim(), en = $('fEn').value.trim().toUpperCase(), tel = $('fTel').value.replace(/\D/g, ''), e = $('fErr');
   if (!/^[\u3400-\u9fff·．\s]{2,10}$/.test(cn)) return e.textContent = '請輸入中文姓名';
   if (!/^[A-Z][A-Z\s,.'-]{1,48}$/.test(en)) return e.textContent = '請輸入英文姓名（英文字母）';
   if (!/^[2-9]\d{7}$/.test(tel)) return e.textContent = '請輸入 8 位香港電話號碼';
-  e.textContent = '';
-  rec = {cn, en, tel};
-  $('cData').innerHTML = [['中文姓名', cn], ['英文姓名', en], ['電話', tel]]
-    .map(([k, v]) => `<span>${k}</span><span>${esc(v)}</span>`).join('');
-  show('kConfirm'); countdown();
+  e.textContent = ''; rec = {cn, en, tel};
+  $('cData').innerHTML = [['中文姓名', cn], ['英文姓名', en], ['電話', tel]].map(([k, v]) => `<span>${k}</span><span>${esc(v)}</span>`).join('');
+  show('kConfirm', 2); countdown();
 };
-$('cBack').onclick = () => { clearInterval(cdT); show('kForm'); };
-
-let cdT;
+$('cBack').onclick = () => { clearInterval(cdT); show('kForm', 1); };
 function countdown(){
-  let n = 3; const b = $('cPrint'); b.disabled = true; b.textContent = '列印（' + n + '）';
-  clearInterval(cdT);
-  cdT = setInterval(() => {
-    n--; if (n > 0) b.textContent = '列印（' + n + '）';
-    else { clearInterval(cdT); b.disabled = false; b.textContent = '列印'; }
-  }, 1000);
+  let n = 3; const b = $('cPrint'); b.disabled = true; b.textContent = '列印（' + n + '）'; clearInterval(cdT);
+  cdT = setInterval(() => { n--; if (n > 0) b.textContent = '列印（' + n + '）'; else { clearInterval(cdT); b.disabled = false; b.textContent = '列印'; } }, 1000);
 }
+const dayKey = () => new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Hong_Kong'}).replace(/-/g, '');
 
 $('cPrint').onclick = async () => {
   $('cPrint').disabled = true; $('dErr').textContent = '';
   try {
     if (!db) throw new Error('Firebase 未設定');
+    const day = dayKey();
+    const c = await db.ref('counters/' + day).transaction(n => (n || 0) + 1);
+    if (!c.committed) throw new Error('未能取得編號');
+    const no = 'IV-' + day + '-' + String(c.snapshot.val()).padStart(3, '0');
     const key = db.ref('interviews').push().key;
-    const data = {...rec, status: 'pending', createdAt: firebase.database.ServerValue.TIMESTAMP};
-    await db.ref('interviews/' + key).set(data);
-    printSheet(key, rec);
-    show('kDone');
-    setTimeout(() => window.print(), 300);
+    await db.ref('interviews/' + key).set({...rec, no, status: 'pending', createdAt: firebase.database.ServerValue.TIMESTAMP});
+    printSheet(key, no, rec);
+    $('doneNo').textContent = no; show('kDone', 3);
+    setTimeout(() => window.print(), 400);
   } catch (e) {
-    show('kDone'); $('dErr').textContent = '未能儲存資料，請通知職員（' + e.message + '）';
+    $('doneNo').textContent = '—'; show('kDone', 3); $('dErr').textContent = '未能儲存資料，請通知職員（' + e.message + '）';
   }
 };
 $('dOk').onclick = () => { resetKiosk(); show('kWelcome'); };
 
-function printSheet(id, r){
-  const q = qrcode(0, 'M'); q.addData(id); q.make();
-  const d = new Date();
-  $('sheet').innerHTML = `<h1>面試資料表</h1>
-   <table><tr><td>中文姓名</td><td>${esc(r.cn)}</td></tr>
-   <tr><td>英文姓名</td><td>${esc(r.en)}</td></tr>
-   <tr><td>電話</td><td>${esc(r.tel)}</td></tr>
-   <tr><td>登記時間</td><td>${d.toLocaleString('zh-HK', {hour12:false})}</td></tr></table>
-   <div class="qr">${q.createSvgTag({cellSize: 6, margin: 0, scalable: true})}
-   <div>請交給面試官掃描此二維碼<br><small>編號：${esc(id)}</small></div></div>`;
+function printSheet(key, no, r){
+  const base = CONFIG.BASE_URL || (location.origin + location.pathname);
+  const q = qrcode(0, 'M'); q.addData(base + '?id=' + key); q.make();
+  $('sheet').innerHTML = `<div class="pp">
+   <div class="pp-head"><div><div class="pp-t">面試登記表</div><div class="pp-s">INTERVIEW REGISTRATION FORM</div></div>
+    <div class="pp-no"><span>編號 NO.</span><b>${esc(no)}</b></div></div>
+   <div class="pp-sec">申請人資料　APPLICANT</div>
+   <table><tr><th>中文姓名</th><td>${esc(r.cn)}</td></tr><tr><th>英文姓名</th><td>${esc(r.en)}</td></tr>
+   <tr><th>聯絡電話</th><td>${esc(r.tel)}</td></tr><tr><th>登記時間</th><td>${esc(fmt(Date.now()))}</td></tr></table>
+   <div class="pp-sec">二維碼　QR CODE</div>
+   <div class="pp-qr">${q.createSvgTag({cellSize: 6, margin: 0, scalable: true})}
+    <ol><li><b>面試官</b>：請以面試用 iPad 掃描，進行評核</li><li><b>申請人</b>：請以手機相機掃描，查看面試結果及評語</li></ol></div>
+   <div class="pp-foot"><span>編號 ${esc(no)} 為此表格唯一編號，請妥善保存</span><span>評核完成後內容不能更改</span></div></div>`;
 }
 
 /* ---------- iPad 2：面試官 ---------- */
-let scanner = null, curId = null, unsub = null, scores = {};
-const CRITERIA = ['溝通表達', '專業知識', '工作態度', '整體印象'];
-
+let scanner = null, busy = false, curId = null, unsub = null, scores = {}, pend = null;
 async function startScan(){
-  show('rScan'); $('rErr').textContent = '';
+  busy = false; show('rScan'); $('rErr').textContent = '';
   try {
     if (!scanner) scanner = new Html5Qrcode('reader');
-    await scanner.start({facingMode: 'environment'}, {fps: 10, qrbox: 240}, txt => load(txt.trim()));
-  } catch (e) { $('rErr').textContent = '未能開啟相機，請允許相機權限，或手動輸入編號'; }
+    if (!scanner.isScanning) await scanner.start({facingMode: 'environment'}, {fps: 10, qrbox: 260}, onCode);
+  } catch (e) { $('rErr').textContent = '未能開啟相機，請允許相機權限（需使用 https 網址）'; }
 }
 async function stopScan(){ try { if (scanner && scanner.isScanning) await scanner.stop(); } catch(e){} }
-$('rManualGo').onclick = () => { const v = $('rManual').value.trim(); if (v) load(v); };
-
+function onCode(t){
+  if (busy) return;
+  const id = parseId(t.trim());
+  if (!id) { $('rErr').textContent = '此二維碼不是面試表格'; return; }
+  busy = true; load(id);
+}
 async function load(id){
-  if (!/^[-\w]{10,40}$/.test(id)) { $('rErr').textContent = '二維碼無效'; return; }
   await stopScan();
   if (unsub) unsub();
-  curId = id; scores = {}; $('vNote').value = ''; $('vErr').textContent = '';
-  let first = true;
+  curId = id; let first = true;
   const ref = db.ref('interviews/' + id);
   const cb = ref.on('value', snap => {
     const r = snap.val();
     if (!r) { $('rErr').textContent = '找不到此表格資料'; startScan(); return; }
-    $('vData').innerHTML = [['中文姓名', r.cn], ['英文姓名', r.en], ['電話', r.tel]]
-      .map(([k, v]) => `<span>${k}</span><span>${esc(v)}</span>`).join('');
-    const t = $('vTag'); t.className = 'tag' + (r.status === 'approved' ? ' ok' : r.status === 'rejected' ? ' no' : '');
-    t.textContent = r.status === 'approved' ? '已獲批' : r.status === 'rejected' ? '不獲批' : '待評核';
-    if (first) { first = false; if (r.scores) scores = r.scores; if (r.note) $('vNote').value = r.note; drawScores(); show('rView'); }
+    applyRec(r, first); first = false;
   });
   unsub = () => ref.off('value', cb);
 }
-
-function drawScores(){
+function applyRec(r, first){
+  const done = r.status !== 'pending';
+  $('vNo').textContent = r.no || '';
+  $('vData').innerHTML = [['中文姓名', r.cn], ['英文姓名', r.en], ['電話', r.tel], ['登記時間', fmt(r.createdAt)]].map(([k, v]) => `<span>${k}</span><span>${esc(v)}</span>`).join('');
+  const t = $('vTag'); t.className = 'tag' + (r.status === 'approved' ? ' ok' : r.status === 'rejected' ? ' no' : ''); t.textContent = STAT[r.status] || '待評核';
+  if (done) { scores = r.scores || {}; $('vNote').value = r.note || ''; }
+  else if (first) { scores = {}; $('vNote').value = ''; }
+  if (done || first) drawScores(done);
+  $('vNote').readOnly = done;
+  $('act').style.display = done ? 'none' : 'flex';
+  $('vBack2').style.display = done ? 'inline-block' : 'none';
+  $('lockBan').style.display = done ? 'flex' : 'none';
+  $('lockTxt').textContent = `此表格已於 ${fmt(r.decidedAt)} 完成評核（${STAT[r.status]}），內容已鎖定，不能再修改`;
+  $('vErr').textContent = '';
+  show('rView');
+}
+function drawScores(ro){
   $('scores').innerHTML = '';
   CRITERIA.forEach(c => {
     const row = document.createElement('div'); row.className = 'score';
     row.innerHTML = `<span>${c}</span><div class="stars"></div>`;
     const box = row.querySelector('.stars');
     for (let i = 1; i <= 5; i++) {
-      const b = document.createElement('button'); b.textContent = i;
+      const b = document.createElement('button'); b.textContent = i; b.disabled = ro;
       if (scores[c] === i) b.className = 's';
       b.onclick = () => { scores[c] = i; box.querySelectorAll('button').forEach((x, j) => x.className = j + 1 === i ? 's' : ''); };
       box.appendChild(b);
@@ -305,24 +393,60 @@ function drawScores(){
     $('scores').appendChild(row);
   });
 }
-
-async function decide(status){
-  const e = $('vErr');
-  if (CRITERIA.some(c => !scores[c])) return e.textContent = '請先為每個項目評分（1–5）';
-  if (!$('vNote').value.trim()) return e.textContent = '請填寫評語';
-  e.textContent = '';
-  try {
-    await db.ref('interviews/' + curId).update({
-      scores, note: $('vNote').value.trim(), status, decidedAt: firebase.database.ServerValue.TIMESTAMP
-    });
-    e.textContent = '';
-    back();
-  } catch (x) { e.textContent = '儲存失敗：' + x.message; }
+function ask(status){
+  if (CRITERIA.some(c => !scores[c])) return $('vErr').textContent = '請先為每個項目評分（1–5）';
+  if (!$('vNote').value.trim()) return $('vErr').textContent = '請填寫評語';
+  $('vErr').textContent = ''; pend = status;
+  $('mTitle').textContent = '確定「' + STAT[status] + '」？';
+  $('mTxt').textContent = '提交後此表格將會鎖定，再次掃描二維碼也不能修改。';
+  $('mOk').className = 'btn ' + (status === 'approved' ? 'ok' : 'no');
+  $('modal').classList.add('on');
 }
-$('vYes').onclick = () => decide('approved');
-$('vNo').onclick = () => decide('rejected');
-function back(){ if (unsub) unsub(); unsub = null; curId = null; $('rManual').value = ''; startScan(); }
-$('vBack').onclick = back;
+$('vYes').onclick = () => ask('approved');
+$('vNo2').onclick = () => ask('rejected');
+$('mNo').onclick = () => $('modal').classList.remove('on');
+$('mOk').onclick = async () => {
+  $('modal').classList.remove('on');
+  const status = pend, note = $('vNote').value.trim(), sc = {...scores};
+  try {
+    const res = await db.ref('interviews/' + curId).transaction(cur => {
+      if (!cur) return cur;
+      if (cur.status !== 'pending') return;          // 已評核 → 中止，不可修改
+      return {...cur, scores: sc, note, status, decidedAt: Date.now()};
+    });
+    if (!res.committed) { $('vErr').textContent = '此表格已被評核，不能修改'; return; }
+    toast('已提交：' + STAT[status]); back();
+  } catch (e) { $('vErr').textContent = '提交失敗：' + e.message; }
+};
+function back(){
+  if (unsub) unsub(); unsub = null; curId = null;
+  try { history.replaceState(null, '', location.pathname); } catch(e){}
+  startScan();
+}
+$('vBack').onclick = back; $('vBack2').onclick = back;
+
+/* ---------- 手機：查看結果 ---------- */
+function openPublic(id){
+  show('pView');
+  db.ref('interviews/' + id).on('value', snap => {
+    const r = snap.val(), b = $('pBody');
+    if (!r) { b.innerHTML = `<div class="card"><h2>找不到此表格</h2><p>請確認二維碼是否正確。</p></div>`; return; }
+    const cls = r.status === 'approved' ? 'a' : r.status === 'rejected' ? 'r' : 'p';
+    const icon = r.status === 'approved' ? '✓' : r.status === 'rejected' ? '✕' : '…';
+    const sub = r.status === 'pending' ? 'PENDING · 審核中' : r.status === 'approved' ? 'APPROVED' : 'NOT APPROVED';
+    let html = `<div class="en" style="text-align:center">Interview Result</div><h2 style="text-align:center">面試結果查詢</h2>
+     <div class="card"><div class="kv" style="font-size:22px;grid-template-columns:90px 1fr"><span>編號</span><span>${esc(r.no)}</span><span>申請人</span><span>${esc(r.cn)}<br><small style="font-weight:500;color:var(--mut)">${esc(r.en)}</small></span></div></div>
+     <div class="stat ${cls}"><span style="font-size:40px">${icon}</span><div>${STAT[r.status]}<small>${sub}</small></div></div>`;
+    if (r.status === 'pending') html += `<p style="text-align:center">面試官尚未完成評核，結果出爐後此頁會自動更新。</p>`;
+    else {
+      html += `<div class="card"><h3>面試評價</h3>` + CRITERIA.map(c => {
+        const v = (r.scores || {})[c] || 0;
+        return `<div class="score"><span>${c}</span><div class="bar">${[1,2,3,4,5].map(i => `<i class="${i <= v ? 'f' : ''}"></i>`).join('')}</div></div>`;
+      }).join('') + `<h3 style="margin-top:18px">評語</h3><div class="note">${esc(r.note)}</div><p style="margin-top:12px;font-size:15px">評核時間：${esc(fmt(r.decidedAt))}</p></div>`;
+    }
+    b.innerHTML = html;
+  }, () => { $('pBody').innerHTML = `<div class="card"><h2>未能載入</h2><p>請稍後再試。</p></div>`; });
+}
 
 boot();
 </script>
