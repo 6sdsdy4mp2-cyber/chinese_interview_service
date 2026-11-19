@@ -86,7 +86,6 @@ input:focus,textarea:focus{outline:3px solid var(--main);border-color:var(--main
   <div class="big">
     <label>中文姓名<input id="fCn" autocomplete="off" placeholder="例：陳大文"></label>
     <label>英文姓名<input id="fEn" autocomplete="off" autocapitalize="characters" placeholder="例：CHAN TAI MAN"></label>
-    <label>香港身份證號碼<input id="fId" autocomplete="off" autocapitalize="characters" placeholder="例：A123456(7)"></label>
     <label>電話號碼<input id="fTel" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="8 位數字"></label>
     <div class="err" id="fErr"></div>
   </div>
@@ -201,32 +200,20 @@ function boot(){
 
 /* ---------- iPad 1：自助登記 ---------- */
 let rec = null;
-function resetKiosk(){ ['fCn','fEn','fId','fTel'].forEach(i => $(i).value = ''); $('fErr').textContent = ''; rec = null; }
-
-function validHkid(s){
-  s = s.toUpperCase().replace(/[()\s]/g, '');
-  const m = s.match(/^([A-Z]{1,2})(\d{6})([0-9A])$/); if (!m) return null;
-  const v = c => c === ' ' ? 36 : c.charCodeAt(0) - 55;
-  const l = m[1].padStart(2, ' ');
-  let sum = v(l[0]) * 9 + v(l[1]) * 8;
-  for (let i = 0; i < 6; i++) sum += +m[2][i] * (7 - i);
-  const cd = m[3] === 'A' ? 10 : +m[3];
-  return (sum + cd) % 11 === 0 ? m[1] + m[2] + '(' + m[3] + ')' : null;
-}
+function resetKiosk(){ ['fCn','fEn','fTel'].forEach(i => $(i).value = ''); $('fErr').textContent = ''; rec = null; }
 
 $('kStart').onclick = () => show('kForm');
 $('fBack').onclick = () => show('kWelcome');
 $('fNext').onclick = () => {
   const cn = $('fCn').value.trim(), en = $('fEn').value.trim().toUpperCase(),
-        id = validHkid($('fId').value), tel = $('fTel').value.replace(/\D/g, '');
+        tel = $('fTel').value.replace(/\D/g, '');
   const e = $('fErr');
   if (!/^[\u3400-\u9fff·．\s]{2,10}$/.test(cn)) return e.textContent = '請輸入中文姓名';
   if (!/^[A-Z][A-Z\s,.'-]{1,48}$/.test(en)) return e.textContent = '請輸入英文姓名（英文字母）';
-  if (!id) return e.textContent = '香港身份證號碼不正確，請檢查';
   if (!/^[2-9]\d{7}$/.test(tel)) return e.textContent = '請輸入 8 位香港電話號碼';
   e.textContent = '';
-  rec = {cn, en, hkid: id, tel};
-  $('cData').innerHTML = [['中文姓名', cn], ['英文姓名', en], ['身份證', id], ['電話', tel]]
+  rec = {cn, en, tel};
+  $('cData').innerHTML = [['中文姓名', cn], ['英文姓名', en], ['電話', tel]]
     .map(([k, v]) => `<span>${k}</span><span>${esc(v)}</span>`).join('');
   show('kConfirm'); countdown();
 };
@@ -264,7 +251,6 @@ function printSheet(id, r){
   $('sheet').innerHTML = `<h1>面試資料表</h1>
    <table><tr><td>中文姓名</td><td>${esc(r.cn)}</td></tr>
    <tr><td>英文姓名</td><td>${esc(r.en)}</td></tr>
-   <tr><td>香港身份證</td><td>${esc(r.hkid)}</td></tr>
    <tr><td>電話</td><td>${esc(r.tel)}</td></tr>
    <tr><td>登記時間</td><td>${d.toLocaleString('zh-HK', {hour12:false})}</td></tr></table>
    <div class="qr">${q.createSvgTag({cellSize: 6, margin: 0, scalable: true})}
@@ -295,7 +281,7 @@ async function load(id){
   const cb = ref.on('value', snap => {
     const r = snap.val();
     if (!r) { $('rErr').textContent = '找不到此表格資料'; startScan(); return; }
-    $('vData').innerHTML = [['中文姓名', r.cn], ['英文姓名', r.en], ['身份證', r.hkid], ['電話', r.tel]]
+    $('vData').innerHTML = [['中文姓名', r.cn], ['英文姓名', r.en], ['電話', r.tel]]
       .map(([k, v]) => `<span>${k}</span><span>${esc(v)}</span>`).join('');
     const t = $('vTag'); t.className = 'tag' + (r.status === 'approved' ? ' ok' : r.status === 'rejected' ? ' no' : '');
     t.textContent = r.status === 'approved' ? '已獲批' : r.status === 'rejected' ? '不獲批' : '待評核';
